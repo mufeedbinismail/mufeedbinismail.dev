@@ -1,0 +1,32 @@
+---
+import { profile } from '../content/profile';
+import CvLinks from './CvLinks.astro';
+---
+
+<section id="contact">
+  <h2 class="display">Want to work together? Get in touch.</h2>
+  <div class="links">
+    <!-- Opened by ContactDialog in the header, which listens for [data-open-contact]. -->
+    <button type="button" class="open" data-open-contact>Email &amp; phone →</button>
+    <a href={profile.linkedin}>LinkedIn ↗</a>
+    <a href={profile.github}>GitHub ↗</a>
+    <CvLinks />
+  </div>
+</section>
+
+<style>
+  #contact {
+    scroll-margin-top: 72px;
+    padding: 48px 0 64px;
+    border-top: 1px solid var(--ink);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 32px;
+  }
+  h2 { font-size: clamp(32px, 5vw, 56px); line-height: 1.08; max-width: 14ch; }
+  .links { display: flex; flex-direction: column; align-items: start; gap: 12px; font: 400 14px var(--mono); }
+  .open { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; }
+  .open:hover { color: var(--ink); }
+</style>

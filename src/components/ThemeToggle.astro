@@ -1,0 +1,27 @@
+---
+/**
+ * Flips between light and dark and remembers the choice. The label names the
+ * theme you would switch to and is picked in CSS from `data-theme`, so it never
+ * disagrees with what the head script chose. Plain inline script rather than a
+ * React island: a click must work the moment the button is on screen.
+ */
+---
+
+<button type="button" class="pill-button theme-toggle" id="theme-toggle">
+  <span class="to-dark">Dark</span>
+  <span class="to-light">Light</span>
+</button>
+<script is:inline>
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch {}
+  });
+</script>
+
+<style is:global>
+  .theme-toggle .to-dark { display: none; }
+  :root[data-theme='light'] .theme-toggle .to-dark { display: inline; }
+  :root[data-theme='light'] .theme-toggle .to-light { display: none; }
+</style>

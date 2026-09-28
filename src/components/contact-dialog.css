@@ -1,0 +1,80 @@
+.contact-button { border-color: var(--accent); color: var(--accent); }
+.contact-button:hover { border-color: var(--ink); color: var(--ink); }
+
+.contact-dialog {
+  padding: 0;
+  width: min(520px, calc(100% - 32px));
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+}
+.contact-dialog::backdrop { background: var(--backdrop); }
+.contact-dialog[open] { animation: contact-in 0.18s ease-out; }
+@keyframes contact-in { from { transform: translateY(12px); opacity: 0; } }
+
+body:has(.contact-dialog[open]) { overflow: hidden; }
+
+.contact-panel { padding: 24px 28px 28px; display: grid; gap: 20px; }
+
+.contact-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ink);
+}
+.contact-head h2 { font-size: 28px; }
+
+.contact-list { margin: 0; display: grid; }
+.contact-list > div {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 4px 16px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.contact-list > div:last-child { border-bottom: 0; }
+.contact-list dd {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 12px;
+  font: 400 14px var(--mono);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.contact-list a { color: var(--accent); }
+.contact-list a:hover { color: var(--ink); }
+
+.copy {
+  font: 400 11px var(--mono);
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+.copy:hover { color: var(--ink); border-color: var(--ink); }
+
+@media (max-width: 420px) {
+  .contact-panel { padding: 20px 16px 24px; }
+  .contact-list > div { grid-template-columns: 1fr; }
+}
+
+.show {
+  font: inherit;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.show:hover { color: var(--ink); }

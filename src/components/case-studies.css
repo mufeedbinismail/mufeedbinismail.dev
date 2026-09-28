@@ -1,0 +1,76 @@
+.case-list { list-style: none; margin: 0; padding: 0; }
+
+.case-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px 28px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line);
+}
+.case-row:hover { color: var(--ink); }
+.case-row:hover .case-title { color: var(--accent); }
+
+/* The hover nudge is a transform, not padding: padding narrows the row and
+   re-wraps the text mid-animation. The metric column stays put. */
+.case-n, .case-main { transition: transform 0.2s ease-out; }
+.case-row:hover .case-n, .case-row:hover .case-main { transform: translateX(12px); }
+
+.case-n { font: 500 13px var(--mono); color: var(--accent); width: 32px; }
+
+.case-main { flex: 1 1 380px; min-width: 0; display: grid; gap: 8px; }
+.case-title { font-size: clamp(21px, 2.6vw, 28px); line-height: 1.2; text-wrap: balance; transition: color 0.2s; }
+.case-summary { font-size: 15px; line-height: 1.55; max-width: 60ch; text-wrap: pretty; }
+
+.case-metric { flex: 0 0 auto; display: grid; gap: 4px; text-align: right; min-width: 150px; max-width: 220px; }
+.case-metric .display { font-size: 24px; }
+
+@media (max-width: 720px) {
+  .case-main { flex-basis: calc(100% - 60px); }
+  .case-metric { text-align: left; margin-left: 60px; max-width: none; min-width: 0; flex: 1 1 calc(100% - 60px); }
+}
+
+/* Drawer: a modal <dialog> pinned to the right edge */
+.drawer {
+  margin: 0 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-left: 1px solid var(--line);
+  width: min(780px, 100%);
+  max-width: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  background: var(--bg);
+  color: var(--ink);
+  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+.drawer::backdrop { background: var(--backdrop); }
+.drawer[open] { animation: drawer-in 0.22s ease-out; }
+@keyframes drawer-in { from { transform: translateX(40px); opacity: 0; } }
+
+body:has(.drawer[open]) { overflow: hidden; }
+
+.drawer-panel { height: 100%; overflow-y: auto; overscroll-behavior: contain; }
+
+.drawer-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.drawer-actions { display: flex; gap: 8px; }
+
+.drawer-body { padding: 48px 32px 72px; display: grid; gap: 40px; }
+
+@media (max-width: 560px) {
+  .drawer-bar { padding: 12px 16px; }
+  .drawer-body { padding: 32px 16px 56px; }
+}

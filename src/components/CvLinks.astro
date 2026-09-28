@@ -1,0 +1,28 @@
+---
+import { publishedCvs } from '../lib/cvs';
+
+interface Props {
+  lead?: string;
+}
+
+const { lead = 'Download CV' } = Astro.props;
+---
+
+{
+  publishedCvs.length > 0 && (
+    <p class="cvs">
+      <span class="muted">{lead}:</span>
+      {publishedCvs.map((cv) => (
+        <a href={cv.href} download>
+          {cv.label}
+        </a>
+      ))}
+    </p>
+  )
+}
+
+<style>
+  .cvs { margin: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; font: 400 14px var(--mono); }
+  a { color: var(--accent); }
+  a:hover { color: var(--ink); }
+</style>

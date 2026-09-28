@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import CaseStudies from '../components/CaseStudies';
+import Highlights from '../components/Highlights.astro';
+import Experience from '../components/Experience.astro';
+import Stack from '../components/Stack.astro';
+import Notes from '../components/Notes.astro';
+import Contact from '../components/Contact.astro';
+import { profile } from '../content/profile';
+import { caseStudiesInOrder } from '../lib/cases';
+import { yearsSince } from '../lib/tenure';
+import { education } from '../content/experience';
+import { stack } from '../content/stack';
+
+const studies = await caseStudiesInOrder();
+// Who this site is about, for search engines. No email or phone: those stay out of the page.
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  jobTitle: profile.headline,
+  url: Astro.site?.href,
+  image: new URL('/og/home.png', Astro.site).href,
+  sameAs: [profile.linkedin, profile.github],
+  address: { '@type': 'PostalAddress', addressLocality: 'Dubai', addressCountry: 'AE' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: education.school },
+  knowsAbout: stack.filter((g) => g.group !== 'Domain').flatMap((g) => g.items),
+};
+const description = `${profile.headline} in Dubai with ${yearsSince(profile.careerStart)}+ years building and maintaining business-critical ERP systems: Laravel, MariaDB internals, infrastructure and data recovery.`;
+---
+
+<Base title={`${profile.name} · ${profile.headline}`} description={description} structuredData={person}>
+  <Hero />
+  <section id="work" class="section">
+    <div class="section-head">
+      <h2 class="display">Selected case studies</h2>
+      <span class="hint">Click to open · ← → to browse</span>
+    </div>
+    <CaseStudies client:load studies={studies} siteName={profile.name} />
+  </section>
+  <Highlights />
+  <Experience />
+  <Stack />
+  <Notes />
+  <Contact />
+</Base>

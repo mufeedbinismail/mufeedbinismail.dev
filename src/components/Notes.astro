@@ -1,0 +1,26 @@
+---
+import { notes } from '../content/notes';
+import { numbered } from '../lib/format';
+---
+
+<section id="notes" class="section">
+  <div class="section-head"><h2 class="display">Notes from the work</h2></div>
+  <div class="cards">
+    {
+      notes.map((note, i) => (
+        <article>
+          <span class="eyebrow">{numbered(i)}</span>
+          <h3 class="display">{note.title}</h3>
+          <p class="muted">{note.text}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 24px; padding-top: 28px; }
+  article { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 28px; display: grid; gap: 14px; align-content: start; }
+  h3 { font-size: 22px; line-height: 1.2; text-wrap: balance; }
+  p { margin: 0; font-size: 15px; line-height: 1.6; text-wrap: pretty; }
+</style>

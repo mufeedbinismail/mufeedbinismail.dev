@@ -1,0 +1,28 @@
+---
+import { stack } from '../content/stack';
+---
+
+<section id="stack" class="section">
+  <div class="section-head"><h2 class="display">Stack &amp; domain</h2></div>
+  <div class="groups">
+    {
+      stack.map((g) => (
+        <div class="group">
+          <h3 class="label">{g.group}</h3>
+          <ul>
+            {g.items.map((item) => (
+              <li class="pill">{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 36px; padding-top: 28px; }
+  .group { display: grid; gap: 14px; align-content: start; }
+  h3 { margin: 0; }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+</style>

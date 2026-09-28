@@ -1,0 +1,35 @@
+---
+import { profile } from '../content/profile';
+import { spelled, yearOf, yearsSince } from '../lib/tenure';
+
+const years = spelled(yearsSince(profile.companyStart));
+const Years = years[0].toUpperCase() + years.slice(1);
+---
+
+<section class="hero">
+  <div class="eyebrow">{profile.headline} · ERP &amp; SaaS · <span class="nowrap">{yearOf(profile.companyStart)}–present</span></div>
+  <h1 class="display">I learn the business before I write the code.</h1>
+  <div class="intro">
+    <p>
+      {Years} years at one ERP company as it grew from three developers to thirty-plus people, first from its
+      Kannur office and in Dubai since {profile.dubaiSince}. I went from writing features to working across the
+      core product: architecture, incidents, and client-facing financial demos.
+    </p>
+    <p>
+      Most of my best work sits between engineering and operations: recovering lost data from raw disk, turning
+      months-long deployments into hours, and making complex domains hard to get wrong.
+    </p>
+  </div>
+</section>
+
+<style>
+  .nowrap { white-space: nowrap; }
+  .hero { padding: 96px 0 80px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  h1 { font-size: clamp(36px, 6vw, 72px); line-height: 1.04; max-width: 17ch; text-wrap: balance; }
+  .intro { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 28px; max-width: 900px; }
+  p { margin: 0; font-size: 18px; line-height: 1.6; color: var(--muted); text-wrap: pretty; }
+  @media (max-width: 560px) {
+    .hero { padding: 56px 0 48px; gap: 28px; }
+    p { font-size: 17px; }
+  }
+</style>

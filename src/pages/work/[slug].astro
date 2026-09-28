@@ -1,0 +1,39 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import CaseStudyBody from '../../components/CaseStudyBody';
+import { profile } from '../../content/profile';
+import { caseStudiesInOrder } from '../../lib/cases';
+import { glueNumberRanges, numbered } from '../../lib/format';
+
+export const getStaticPaths = (async () => {
+  const studies = await caseStudiesInOrder();
+  return studies.map((study, i) => ({
+    params: { slug: study.slug },
+    props: { study, index: i, count: studies.length, next: studies[(i + 1) % studies.length] },
+  }));
+}) satisfies GetStaticPaths;
+
+const { study, index, count, next } = Astro.props;
+---
+
+<Base title={`${study.title} · ${profile.name}`} description={study.summary} image={`/og/${study.slug}.png`} type="article">
+  <div class="page">
+    <nav class="crumbs hint" aria-label="Case studies">
+      <a href="/#work">← All case studies</a>
+      <span>Case study {numbered(index)} / {numbered(count - 1)}</span>
+    </nav>
+    <CaseStudyBody study={study} titleAs="h1" />
+    <a class="cs-next" href={`/work/${next.slug}`}>
+      <span class="hint">Next case study →</span>
+      <span class="display">{glueNumberRanges(next.title)}</span>
+    </a>
+  </div>
+</Base>
+
+<style>
+  .page { max-width: 780px; padding: 40px 0 88px; display: grid; gap: 40px; }
+  .crumbs { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .crumbs a { color: var(--muted); }
+  .crumbs a:hover { color: var(--accent); }
+</style>

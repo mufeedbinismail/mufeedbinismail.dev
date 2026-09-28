@@ -1,0 +1,36 @@
+---
+import { highlights } from '../content/highlights';
+---
+
+<section id="more" class="section">
+  <div class="section-head"><h2 class="display">More work</h2></div>
+  <ul>
+    {
+      highlights.map((h) => (
+        <li>
+          <div class="top">
+            <h3>{h.title}</h3>
+            <span class="hint">{h.year}</span>
+          </div>
+          <p class="muted">{h.text}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    column-gap: 40px;
+  }
+  li { padding: 22px 0; border-bottom: 1px solid var(--line); display: grid; gap: 6px; align-content: start; }
+  .top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+  h3 { margin: 0; font-weight: 600; font-size: 15px; }
+  .hint { white-space: nowrap; }
+  p { margin: 0; font-size: 14px; line-height: 1.55; text-wrap: pretty; }
+</style>

@@ -1,0 +1,15 @@
+# Durations on the site ("six years at one ERP company") are computed at build
+# time, so the site is rebuilt on the 1st of every month to keep them current.
+name: Monthly rebuild
+
+on:
+  schedule:
+    - cron: '0 3 1 * *'
+  workflow_dispatch:
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cloudflare Pages deploy hook
+        run: curl --fail -sS -X POST "${{ secrets.CF_PAGES_DEPLOY_HOOK }}"

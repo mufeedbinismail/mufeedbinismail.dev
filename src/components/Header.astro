@@ -1,0 +1,83 @@
+---
+import { CONTACT_EMAIL, CONTACT_PHONE } from 'astro:env/server';
+import { profile } from '../content/profile';
+import { publishedCvs } from '../lib/cvs';
+import { obfuscate } from '../lib/obfuscate';
+import ContactDialog from './ContactDialog';
+import ThemeToggle from './ThemeToggle.astro';
+
+const onHome = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
+const to = (id: string) => (onHome ? `#${id}` : `/#${id}`);
+const links = [
+  ['work', 'Work'],
+  ['more', 'More'],
+  ['experience', 'Experience'],
+  ['stack', 'Stack'],
+  ['notes', 'Notes'],
+];
+---
+
+<header>
+  <div class="wrap bar">
+    <a href={onHome ? '#top' : '/'} class="display name">{profile.name}</a>
+    <nav aria-label="Sections">
+      {links.map(([id, label]) => <a href={to(id)}>{label}</a>)}
+    </nav>
+    <div class="actions">
+      <ContactDialog
+        client:load
+        email={obfuscate(CONTACT_EMAIL)}
+        phone={obfuscate(CONTACT_PHONE)}
+        location={profile.location}
+        linkedin={profile.linkedin}
+        github={profile.github}
+        cvs={publishedCvs}
+      />
+      <ThemeToggle />
+    </div>
+  </div>
+</header>
+
+<style>
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: 'name nav actions';
+    align-items: center;
+    gap: 12px 22px;
+  }
+  .name { grid-area: name; font-size: 20px; }
+  nav { grid-area: nav; justify-self: end; display: flex; gap: 22px; font-size: 14px; }
+  .actions { grid-area: actions; display: flex; align-items: center; gap: 10px; }
+
+  /* Phones: name and actions share the first row; the section links get a
+     single row of their own, scrolling sideways if they ever outgrow it. */
+  @media (max-width: 720px) {
+    .bar {
+      grid-template-columns: 1fr auto;
+      grid-template-areas: 'name actions' 'nav nav';
+      padding-top: 10px;
+      padding-bottom: 8px;
+      gap: 8px 12px;
+    }
+    .name { font-size: 18px; }
+    nav {
+      justify-self: stretch;
+      gap: 18px;
+      font-size: 13px;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+  }
+</style>

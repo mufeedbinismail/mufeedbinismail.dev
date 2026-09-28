@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mufeedbinismail.dev/sitemap-index.xml

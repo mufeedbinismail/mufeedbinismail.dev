@@ -1,0 +1,127 @@
+@import '@fontsource/ibm-plex-sans/latin-400.css';
+@import '@fontsource/ibm-plex-sans/latin-500.css';
+@import '@fontsource/ibm-plex-sans/latin-600.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+
+/* Console theme, from the design's themes().Console. Dark is the default;
+   light applies only when the visitor has chosen it. */
+:root {
+  --bg: #0e1110;
+  --surface: #151918;
+  --ink: #e3e8e5;
+  --muted: #8d9792;
+  --line: rgba(227, 232, 229, 0.1);
+  --accent: oklch(0.8 0.13 160);
+  --backdrop: rgba(0, 0, 0, 0.6);
+  --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --display: var(--mono);
+  --dispw: 500;
+  --track: -0.035em;
+  --gutter: 28px;
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: #f2f3f2;
+  --surface: #ffffff;
+  --ink: #121614;
+  --muted: #5a635e;
+  --line: rgba(18, 22, 20, 0.12);
+  --accent: oklch(0.52 0.12 160);
+  --backdrop: rgba(10, 10, 10, 0.45);
+  color-scheme: light;
+}
+
+@media (max-width: 560px) {
+  :root { --gutter: 16px; }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.2s, color 0.2s;
+}
+
+a { color: var(--ink); text-decoration: none; }
+a:hover { color: var(--accent); }
+::selection { background: var(--accent); color: var(--bg); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 var(--gutter); }
+
+.section { scroll-margin-top: 72px; padding: 24px 0 88px; }
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 14px;
+}
+
+.display {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: var(--dispw);
+  letter-spacing: var(--track);
+}
+
+.section-head h2 { font-size: clamp(28px, 4vw, 36px); }
+
+/* Mono caption in accent: eyebrows, numbers */
+.eyebrow {
+  font: 500 12px var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Mono caption in muted: group labels */
+.label {
+  font: 500 12px var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.hint { font: 400 12px var(--mono); color: var(--muted); }
+
+.pill {
+  display: inline-block;
+  font-size: 14px;
+  padding: 5px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.pill-button {
+  font: 500 12px var(--mono);
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.pill-button:hover { border-color: var(--ink); }
+.pill-button.solid { color: var(--bg); background: var(--ink); border-color: var(--ink); }
+
+.muted { color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

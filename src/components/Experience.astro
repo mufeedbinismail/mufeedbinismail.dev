@@ -1,0 +1,104 @@
+---
+import { education, employers } from '../content/experience';
+import { monthLabel } from '../lib/tenure';
+import CvLinks from './CvLinks.astro';
+---
+
+<section id="experience" class="section">
+  <div class="section-head"><h2 class="display">Experience</h2></div>
+
+  {
+    employers.map((job) => (
+      <article class="employer">
+        <header>
+          <div>
+            <h3 class="display">{job.company}</h3>
+            <p class="title">{job.title}</p>
+          </div>
+          <div class="when">
+            <span>
+              {monthLabel(job.from)} – {job.to ? monthLabel(job.to) : 'present'}
+            </span>
+            <span class="muted">{job.place}</span>
+          </div>
+        </header>
+        {job.responsibilities && (
+          <ul class="responsibilities">
+            {job.responsibilities.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        )}
+        {job.carriedForward && (
+          <div class="carried">
+            <span class="eyebrow">Carried forward</span>
+            <p>{job.carriedForward}</p>
+          </div>
+        )}
+        {job.years.length > 0 && (
+          <ol>
+            {job.years.map((entry) => (
+              <li>
+                <span class="display year">{entry.year}</span>
+                <div class="entry">
+                  <span class="eyebrow">{entry.role}</span>
+                  <p>
+                    {entry.text}
+                    {entry.caseStudy && (
+                      <>
+                        {' '}
+                        <a href={`/work/${entry.caseStudy}`}>Case study →</a>
+                      </>
+                    )}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        )}
+      </article>
+    ))
+  }
+
+  <article class="employer">
+    <header>
+      <div>
+        <h3 class="display">Education</h3>
+        <p class="title">{education.degree} · {education.school}</p>
+      </div>
+      <div class="when"><span>{education.year}</span></div>
+    </header>
+  </article>
+
+  <div class="cv"><CvLinks lead="Full detail in the CV" /></div>
+</section>
+
+<style>
+  .employer { padding: 32px 0 8px; border-bottom: 1px solid var(--line); }
+  .employer header { display: flex; justify-content: space-between; gap: 12px 32px; flex-wrap: wrap; padding-bottom: 24px; }
+  h3 { font-size: 24px; }
+  .title { margin: 6px 0 0; font-size: 15px; color: var(--muted); }
+  .when { display: grid; gap: 4px; font: 400 13px var(--mono); text-align: right; align-content: start; }
+  /* Indented to line up with the text of the year-by-year entries above. */
+  .responsibilities, .carried { margin: 0 0 0 120px; max-width: 62ch; }
+  .responsibilities { list-style: none; padding: 0; display: grid; gap: 10px; }
+  .responsibilities li { position: relative; padding-left: 20px; font-size: 16px; line-height: 1.6; text-wrap: pretty; }
+  .responsibilities li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-family: var(--mono); }
+  .carried { display: grid; gap: 6px; padding: 20px 0 24px; margin-top: 20px; border-top: 1px solid var(--line); }
+  .carried p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--muted); text-wrap: pretty; }
+  ol { list-style: none; margin: 0; padding: 0; }
+  ol > li { display: flex; flex-wrap: wrap; gap: 8px 40px; padding: 20px 0; border-top: 1px solid var(--line); }
+  .year { flex: 0 0 80px; font-size: 22px; }
+  .entry { flex: 1 1 400px; display: grid; gap: 6px; }
+  .entry p { margin: 0; font-size: 16px; line-height: 1.6; max-width: 62ch; text-wrap: pretty; }
+  .entry a { color: var(--accent); white-space: nowrap; font-size: 14px; }
+  .entry a:hover { color: var(--ink); }
+  .cv { padding-top: 24px; }
+  @media (max-width: 720px) {
+    .responsibilities, .carried { margin-left: 0; }
+  }
+  @media (max-width: 560px) {
+    .when { text-align: left; }
+    .entry { flex-basis: 100%; }
+  }
+</style>

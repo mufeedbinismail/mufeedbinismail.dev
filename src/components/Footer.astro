@@ -1,0 +1,21 @@
+---
+import { profile } from '../content/profile';
+---
+
+<footer class="wrap hint">
+  <span>© {new Date().getFullYear()} {profile.name}</span>
+  <a href={profile.repo}>Source on GitHub ↗</a>
+</footer>
+
+<style>
+  footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 20px;
+    padding-bottom: 32px;
+  }
+  a { color: var(--muted); }
+  a:hover { color: var(--accent); }
+</style>
