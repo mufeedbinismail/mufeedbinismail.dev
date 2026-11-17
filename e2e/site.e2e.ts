@@ -1,39 +1,77 @@
 import { expect, test } from '@playwright/test';
 
-test('case studies open in a drawer that follows the URL and the keyboard', async ({ page }) => {
+test('every write-up linked from the work list opens its page', async ({ page }) => {
+  await page.goto('/');
+  const hrefs = [...new Set(await page.locator('#work a[href^="/work/"]').evaluateAll((links) => links.map((a) => a.getAttribute('href'))))];
+  expect(hrefs).toHaveLength(6);
+  for (const href of hrefs) {
+    await page.goto(href!);
+    const drawer = page.locator('dialog.drawer');
+    await expect(drawer, href!).toBeVisible();
+    await expect(drawer.getByText('The problem'), href!).toBeVisible();
+  }
+});
+
+test("a write-up's own URL opens the home page with the drawer open", async ({ page }) => {
+  await page.goto('/work/workflow-engine');
+  const drawer = page.locator('dialog.drawer');
+  await expect(drawer).toBeVisible();
+  await expect(drawer.getByRole('heading', { level: 2 })).toContainText('workflow engine');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Mohamed Mufeed');
+
+  await page.keyboard.press('ArrowRight');
+  await expect(page).toHaveURL(/\/work\/innodb-recovery$/);
+
+  await drawer.getByRole('link', { name: 'Close' }).click();
+  await expect(drawer).toBeHidden();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator('#work')).toBeVisible();
+});
+
+test('write-ups open in a drawer that follows the URL and the keyboard', async ({ page }) => {
   await page.goto('/');
   const drawer = page.locator('dialog.drawer');
-  const firstRow = page.locator('a.case-row').first();
+  const firstLink = page.locator('#work h4 a[href="/work/acodax-repository"]');
 
-  await firstRow.click();
+  await firstLink.click();
   await expect(drawer).toBeVisible();
-  await expect(page).toHaveURL(/\/work\/innodb-recovery$/);
+  await expect(page).toHaveURL(/\/work\/acodax-repository$/);
+  await expect(drawer.getByText('Write-up 01 / 06')).toBeVisible();
 
   await page.keyboard.press('ArrowRight');
   await expect(page).toHaveURL(/\/work\/client-onboarding$/);
-  await expect(drawer.getByRole('heading', { level: 2 })).toContainText('New-client deployment');
+  await expect(drawer.getByRole('heading', { level: 2 })).toContainText('One core codebase');
+
+  await drawer.getByRole('link', { name: '← Prev' }).click();
+  await expect(page).toHaveURL(/\/work\/acodax-repository$/);
 
   await page.keyboard.press('Escape');
   await expect(drawer).toBeHidden();
   await expect(page).toHaveURL(/\/$/);
-  await expect(firstRow).toBeFocused();
+  await expect(firstLink).toBeFocused();
 });
 
 test('the browser back button closes the drawer', async ({ page }) => {
   await page.goto('/');
-  await page.locator('a.case-row').nth(2).click();
+  await page.locator('#experience a[href^="/work/"]').first().click();
   await expect(page.locator('dialog.drawer')).toBeVisible();
   await page.goBack();
   await expect(page.locator('dialog.drawer')).toBeHidden();
   await expect(page).toHaveURL(/\/$/);
 });
 
-test('a case study page renders fully without JavaScript', async ({ browser }) => {
+test('a write-up page renders fully without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto('/work/innodb-recovery');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('dropped database');
-  await expect(page.getByText('The problem')).toBeVisible();
+  const drawer = page.locator('dialog.drawer');
+  await expect(drawer).toBeVisible();
+  await expect(drawer.getByRole('heading', { level: 2 })).toContainText('dropped database');
+  await expect(drawer.getByText('The problem')).toBeVisible();
+  // The bar's controls are real links, so they still work without JavaScript.
+  // (Checked by address: Playwright's click stability check stalls when JavaScript is off.)
+  await expect(drawer.getByRole('link', { name: 'Next →' })).toHaveAttribute('href', '/work/acodax-repository');
+  await expect(drawer.getByRole('link', { name: 'Close' })).toHaveAttribute('href', '/');
   await context.close();
 });
 
@@ -76,7 +114,7 @@ test('nothing scrolls sideways on a phone', async ({ page }) => {
 test('every CV download link serves a PDF', async ({ page, request }) => {
   await page.goto('/');
   const hrefs = [...new Set(await page.locator('#experience a[href^="/cv/"]').evaluateAll((links) => links.map((a) => a.getAttribute('href'))))];
-  expect(hrefs).toHaveLength(3);
+  expect(hrefs).toHaveLength(1);
   for (const href of hrefs) {
     const response = await request.get(href!);
     expect(response.ok(), href!).toBe(true);

@@ -1,24 +1,19 @@
 ---
-order: 4
-title: A configurable workflow engine for every approval
-summary: Replaced a single hardwired approval path with one engine for tasks and multi-level approvals across the product.
-metric: 1 engine
-metricLabel: for all approval flows
+order: 5
+title: A workflow engine for approvals
+summary: Every client wanted approvals, and every client’s flow was different. I replaced a fixed two-level setup with one engine that runs whatever flow a client configures.
 year: '2024'
-role: Designer & implementer
-tags: [Workflow engine, Architecture, Laravel, Developer experience]
-metrics:
-  - { value: N levels, label: of configurable approval }
-  - { value: 1 place, label: for all tasks and activities }
-  - { value: '0', label: engine internals needed to add a flow }
-problem: Document changes, leave requests and new order applications each needed approvals, but the product had one fixed, non-configurable path. Every new requirement meant custom code.
+area: AxisPro HR
+role: Designed and built it
+stack: [PHP, Laravel, Interfaces]
+problem: Approvals were a fixed level-one and level-two approver set on each user. It wasn’t configurable, so each client’s real flow for leave requests, document changes or new orders became custom code. It came to a head while merging HR into the core product.
 steps:
-  - heading: Unify tasks and activities
-    text: Modelled every approvable action as a task that moves through defined steps, so they all live in one place.
-  - heading: Make approval levels configuration
-    text: Clients can define who approves at each level without code changes.
-  - heading: Hide the engine behind a small contract
-    text: Adding a workflow means declaring what happens at each step. Colleagues don’t need to understand the internals.
-outcome: New workflows went from custom builds to short definitions, and clients got approval chains that match how they actually operate.
-lesson: A good internal engine is measured by how little other developers need to know about it.
+  - heading: One place for tasks
+    text: Leave requests, document changes and new orders all became tasks that move through steps, with the people involved discussing each one in the same place.
+  - heading: Approvers as configuration
+    text: Each step’s approver can be a user, a role, an employee, a dependant or an automated step, set per client without code.
+  - heading: A small contract for developers
+    text: A central engine handles the transitions. Adding a workflow means writing what happens at each step; nobody has to learn how the engine works.
+outcome: New approval flows became short definitions instead of custom work, and clients got flows that match how they actually operate.
+lesson: An internal engine is doing its job when other developers don’t have to think about it.
 ---

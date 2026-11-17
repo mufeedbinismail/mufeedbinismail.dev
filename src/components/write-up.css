@@ -1,0 +1,30 @@
+.wu { display: grid; gap: 36px; }
+.wu p { margin: 0; font-size: 17px; line-height: 1.7; text-wrap: pretty; }
+
+.wu-intro { display: grid; gap: 14px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+.wu-intro .hint { font-size: 13px; line-height: 1.5; }
+.wu-title { font-size: clamp(28px, 4vw, 40px); line-height: 1.12; text-wrap: balance; }
+.wu .wu-summary { font-size: 18px; line-height: 1.6; }
+
+.wu-part { display: grid; gap: 12px; }
+.wu-part h3 { margin: 0; }
+.wu-step { display: grid; gap: 4px; }
+.wu-step + .wu-step { margin-top: 8px; }
+.wu-step h4 { margin: 0; font-weight: 600; font-size: 17px; }
+
+/* "Next write-up": a link on a write-up's own page, a button in the drawer. */
+.wu-next {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  padding: 24px 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: none;
+  font: inherit;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+.wu-next-title { font-weight: 600; font-size: 18px; }
+.wu-next:hover .wu-next-title { color: var(--accent); }

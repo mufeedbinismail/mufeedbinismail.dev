@@ -3,21 +3,17 @@ import { profile } from '../../content/profile';
 import { caseStudiesInOrder } from '../../lib/cases';
 import { ogImageFor } from '../../lib/og-image';
 
-/** One preview image for the home page (`/og/home.png`) and one per case study. */
+/** One preview image for the home page (`/og/home.png`) and one per write-up. */
 export const getStaticPaths = (async () => {
   const studies = await caseStudiesInOrder();
   return [
     {
       params: { slug: 'home' },
-      props: { eyebrow: `${profile.headline} · ${profile.location}`, title: 'I learn the business before I write the code.' },
+      props: { eyebrow: `${profile.headline} · ${profile.location}`, title: profile.title.replace(' · ', ', ') },
     },
     ...studies.map((study) => ({
       params: { slug: study.slug },
-      props: {
-        eyebrow: `Case study · ${study.year}`,
-        title: study.title,
-        metric: { value: study.metric, label: study.metricLabel },
-      },
+      props: { eyebrow: `${study.area} · ${study.year}`, title: study.title },
     })),
   ];
 }) satisfies GetStaticPaths;

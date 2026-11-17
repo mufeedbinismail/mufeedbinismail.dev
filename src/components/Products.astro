@@ -1,0 +1,40 @@
+---
+import { builtWith, products } from '../content/products';
+---
+
+<section id="products" class="section">
+  <div class="section-head">
+    <h2 class="display">Products</h2>
+    <span class="hint">Built front to back</span>
+  </div>
+  <p class="built muted">{builtWith}</p>
+  <div class="grid">
+    {
+      products.map((p) => (
+        <article>
+          <header>
+            <h3 class="display">{p.name}</h3>
+            <span class="hint">
+              {p.when} · {p.where}
+            </span>
+          </header>
+          <p>{p.what}</p>
+          <p class="muted">{p.part}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .built { margin: 0; padding: 20px 0 8px; font: 400 13px/1.6 var(--mono); }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+    column-gap: 48px;
+  }
+  article { padding: 24px 0; border-bottom: 1px solid var(--line); display: grid; gap: 10px; align-content: start; }
+  header { display: grid; gap: 4px; }
+  h3 { font-size: 20px; line-height: 1.25; }
+  p { margin: 0; font-size: 15px; line-height: 1.6; max-width: 62ch; text-wrap: pretty; }
+</style>

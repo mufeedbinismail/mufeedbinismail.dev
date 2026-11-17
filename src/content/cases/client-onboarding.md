@@ -1,24 +1,19 @@
 ---
 order: 2
-title: 'New-client deployment: 3–4 months down to 2–3 hours'
-summary: Replaced copy-paste client forks with one versioned core and turned scattered customisations into configurable features.
-metric: 2–3 h
-metricLabel: to onboard a client, down from 3–4 months
-year: 2021–2023
-role: Developer
-tags: [Git workflow, Architecture, Configuration, Process]
-metrics:
-  - { value: 3–4 mo, label: deployment before }
-  - { value: 2–3 h, label: deployment after }
-  - { value: '1', label: central codebase for 200+ clients }
-problem: Each new client started as a copy of another client’s code with git history stripped out. Features and bugs drifted across 10+ divergent copies. Merging a single feature into a new deployment took 1–2 days, and a full rollout took months.
+title: One core codebase for every client
+summary: New clients used to start as a copy of another client’s code. I set up a single core project they fork from and turned common customisations into settings. Setting up a client went from 3–4 months to 2–3 hours, and later to about 15 minutes.
+year: 2023 onward
+area: AxisPro core
+role: Proposed it, built it, maintained it
+stack: [Git, PHP, Configuration]
+problem: Each new client began as a copy of an existing client’s code with the git history removed. Features and fixes were scattered across many copies, merging one feature into a new client took a day or two, and going live took three to four months. When about ten new clients arrived around the start of 2023, the team couldn’t keep up.
 steps:
-  - heading: Fix git discipline first
-    text: Moved the team off giant commits, live edits on production and dated backup folders, toward one commit per unit of work. That made every later step possible.
-  - heading: Create a core project with provenance
-    text: New clients are now forked from core, and their first commit records the source repo and commit. Every divergence can be traced, and fixes flow across projects.
-  - heading: Turn customisations into options
-    text: Identified the customisations clients kept asking for and rebuilt them as optional, configurable features inside core instead of per-client patches.
-outcome: Setting up a new client went from a quarter-long merge project to an afternoon. Upgrades and cross-client bug fixes became routine instead of risky.
-lesson: The biggest speedups were process and structure, not code. Code only became reusable once history was trustworthy.
+  - heading: Git habits first
+    text: This only works if history can be trusted, so the team had to commit one unit of work at a time instead of large mixed commits, edits on production and _backup folders. I had spent the previous months in Calicut teaching exactly that.
+  - heading: A core project with a recorded origin
+    text: New clients are copied from core, and their first commit records which repository and commit they came from. Fixes that apply to everyone go into core and reach clients from there, and every client’s divergence can be traced.
+  - heading: Customisations become settings
+    text: Customisations that kept coming up across clients were rebuilt once in core as optional features, switched on per client.
+outcome: Setting up a new client went from 3–4 months to 2–3 hours, and to about 15 minutes once I had automated most of the steps. Upgrades and fixes across clients became routine.
+lesson: Most of the time saved came from process and structure, not code. The code only became reusable once the history could be trusted.
 ---

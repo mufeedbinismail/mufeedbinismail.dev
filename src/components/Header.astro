@@ -6,14 +6,15 @@ import { obfuscate } from '../lib/obfuscate';
 import ContactDialog from './ContactDialog';
 import ThemeToggle from './ThemeToggle.astro';
 
-const onHome = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
+// A write-up's own URL renders the home page behind its drawer, so it counts as home.
+const onHome = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html' || Astro.url.pathname.startsWith('/work/');
 const to = (id: string) => (onHome ? `#${id}` : `/#${id}`);
 const links = [
+  ['products', 'Products'],
   ['work', 'Work'],
-  ['more', 'More'],
   ['experience', 'Experience'],
+  ['how-i-work', 'How I work'],
   ['stack', 'Stack'],
-  ['notes', 'Notes'],
 ];
 ---
 

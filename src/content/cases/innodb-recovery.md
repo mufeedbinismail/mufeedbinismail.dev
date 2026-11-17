@@ -1,25 +1,19 @@
 ---
-order: 1
-title: Carving 300+ invoices back from a dropped database
-summary: A production database was dropped by accident. Using the previous day’s backup plus raw disk forensics, I got back every transaction written after it.
-metric: AED 300K+
-metricLabel: in transactions recovered
+order: 6
+title: Recovering a dropped database from the raw disk
+summary: A colleague dropped a live client database by accident, with binary logging off. The previous day’s backup was restored the same day; the rest of that day’s transactions I recovered from the disk itself, over eight weeks.
 year: '2025'
-role: Solo recovery
-tags: [MariaDB, InnoDB internals, Go, Data forensics]
-metrics:
-  - { value: AED 200K+, label: in 300+ invoices restored }
-  - { value: AED 130K+, label: in 120+ payments restored }
-  - { value: 100%, label: of lost transactions recovered }
-  - { value: 8 wks, label: from raw disk image to done }
-problem: During a post-migration check, a colleague dropped a live client database. The last backup was from the day before, so a full day of invoices and payments existed only as fragments on disk. No off-the-shelf tool could reconstruct them.
+area: AxisPro servers and data
+role: On my own
+stack: [MariaDB, InnoDB, Go]
+problem: In May 2025, while cleaning up a server after a migration, a colleague deleted a live database. Binary logging was off, so there was nothing to replay. The backup on our NAS covered everything up to the day before. That day’s invoices and payments existed only as freed space on the disk, which any new write could overwrite.
 steps:
-  - heading: Learn the storage engine from the bytes up
-    text: Studied InnoDB’s on-disk layout (pages, B-tree indexes, record formats and undo log structure), all well below the level most application developers ever touch.
-  - heading: Write a Go carver for raw pages
-    text: Reverse-engineered the page format and wrote tooling that scanned disk sectors, identified InnoDB pages, and decoded records back into rows. That recovered about 90% in four weeks.
-  - heading: Switch mental models for the last 10%
-    text: The remaining data only existed in undo logs, which use a different format and a different logic. Four more weeks rebuilt those records and reconciled them with the carved rows.
-outcome: Every transaction from the gap was restored and reconciled against the backup, so the client lost no financial records.
-lesson: Recovery work rewards changing your mental model. The technique that got the first 90% was useless for the last 10%.
+  - heading: Stop writes, keep the client working
+    text: We stopped the server straight away and moved the other clients on it to a new server. I restored the previous day’s backup so the client could carry on working.
+  - heading: Learn how InnoDB stores data
+    text: I read the MariaDB source to learn InnoDB’s on-disk format (pages, indexes, record layout, undo logs), learned Go, and wrote a tool that scanned the disk image byte by byte, found InnoDB pages and decoded the rows of the transactions table. That recovered about 90% in four weeks.
+  - heading: Undo logs for the rest
+    text: The remaining records existed only in the undo logs, which use a different format and have to be read differently. That took another four weeks.
+outcome: All 300+ transactions from that day were restored and reconciled against the backup. The client lost no financial records.
+lesson: The approach that recovered the first 90% was no use for the last 10%. I had to start again with a different picture of how the data was stored.
 ---

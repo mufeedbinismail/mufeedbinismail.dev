@@ -1,0 +1,65 @@
+---
+import { work } from '../content/work';
+import { caseStudiesInOrder } from '../lib/cases';
+import { glueNumberRanges } from '../lib/format';
+
+const studies = new Map((await caseStudiesInOrder()).map((s) => [s.slug, s]));
+
+/** Every row in one shape; a write-up row borrows its words from the write-up itself. */
+const groups = work.map(({ area, items }) => ({
+  area,
+  rows: items.map((item) => {
+    if (!('writeUp' in item)) return { ...item, href: undefined };
+    const study = studies.get(item.writeUp);
+    if (!study) throw new Error(`work.ts names a write-up that doesn't exist: ${item.writeUp}`);
+    return { title: study.title, year: study.year, text: study.summary, href: `/work/${study.slug}` };
+  }),
+}));
+---
+
+<section id="work" class="section">
+  <div class="section-head">
+    <h2 class="display">Work</h2>
+    <span class="hint">Grouped by product and the part of it the work touched</span>
+  </div>
+  {
+    groups.map((group) => (
+      <div class="group">
+        <h3 class="label">{group.area}</h3>
+        <ul>
+          {group.rows.map((row) => (
+            <li>
+              <span class="year hint">{glueNumberRanges(row.year)}</span>
+              <div class="body">
+                <h4>{row.href ? <a href={row.href}>{row.title}</a> : row.title}</h4>
+                <p class="muted">{glueNumberRanges(row.text)}</p>
+                {row.href && (
+                  <a class="more" href={row.href}>
+                    Read the write-up →
+                  </a>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</section>
+
+<style>
+  .group { padding-top: 32px; }
+  .group h3 { margin: 0 0 4px; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { display: flex; flex-wrap: wrap; gap: 6px 32px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .year { flex: 0 0 96px; padding-top: 3px; }
+  .body { flex: 1 1 420px; min-width: 0; display: grid; gap: 6px; max-width: 70ch; }
+  h4 { margin: 0; font-weight: 600; font-size: 17px; line-height: 1.35; }
+  h4 a:hover { color: var(--accent); }
+  p { margin: 0; font-size: 15px; line-height: 1.6; text-wrap: pretty; }
+  .more { color: var(--accent); font: 400 13px var(--mono); justify-self: start; }
+  .more:hover { color: var(--ink); }
+  @media (max-width: 560px) {
+    .year { flex-basis: 100%; padding-top: 0; }
+  }
+</style>

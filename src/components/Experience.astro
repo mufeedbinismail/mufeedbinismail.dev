@@ -1,5 +1,6 @@
 ---
 import { education, employers } from '../content/experience';
+import { glueNumberRanges } from '../lib/format';
 import { monthLabel } from '../lib/tenure';
 import CvLinks from './CvLinks.astro';
 ---
@@ -22,32 +23,32 @@ import CvLinks from './CvLinks.astro';
             <span class="muted">{job.place}</span>
           </div>
         </header>
-        {job.responsibilities && (
-          <ul class="responsibilities">
-            {job.responsibilities.map((item) => (
-              <li>{item}</li>
+        {job.summary && <p class="summary">{job.summary}</p>}
+        {job.areas && (
+          <ul class="areas">
+            {job.areas.map((area) => (
+              <li>
+                <span class="period">{area.label}</span>
+                <div class="entry">
+                  <p>{area.text}</p>
+                </div>
+              </li>
             ))}
           </ul>
         )}
-        {job.carriedForward && (
-          <div class="carried">
-            <span class="eyebrow">Carried forward</span>
-            <p>{job.carriedForward}</p>
-          </div>
-        )}
-        {job.years.length > 0 && (
+        {job.periods.length > 0 && (
           <ol>
-            {job.years.map((entry) => (
+            {job.periods.map((period) => (
               <li>
-                <span class="display year">{entry.year}</span>
+                <span class="period">{glueNumberRanges(period.when)}</span>
                 <div class="entry">
-                  <span class="eyebrow">{entry.role}</span>
+                  <span class="role">{period.role}</span>
                   <p>
-                    {entry.text}
-                    {entry.caseStudy && (
+                    {period.text}
+                    {period.writeUp && (
                       <>
                         {' '}
-                        <a href={`/work/${entry.caseStudy}`}>Case study →</a>
+                        <a href={`/work/${period.writeUp}`}>Write-up →</a>
                       </>
                     )}
                   </p>
@@ -70,7 +71,7 @@ import CvLinks from './CvLinks.astro';
     </header>
   </article>
 
-  <div class="cv"><CvLinks lead="Full detail in the CV" /></div>
+  <div class="cv"><CvLinks /></div>
 </section>
 
 <style>
@@ -79,26 +80,23 @@ import CvLinks from './CvLinks.astro';
   h3 { font-size: 24px; }
   .title { margin: 6px 0 0; font-size: 15px; color: var(--muted); }
   .when { display: grid; gap: 4px; font: 400 13px var(--mono); text-align: right; align-content: start; }
-  /* Indented to line up with the text of the year-by-year entries above. */
-  .responsibilities, .carried { margin: 0 0 0 120px; max-width: 62ch; }
-  .responsibilities { list-style: none; padding: 0; display: grid; gap: 10px; }
-  .responsibilities li { position: relative; padding-left: 20px; font-size: 16px; line-height: 1.6; text-wrap: pretty; }
-  .responsibilities li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-family: var(--mono); }
-  .carried { display: grid; gap: 6px; padding: 20px 0 24px; margin-top: 20px; border-top: 1px solid var(--line); }
-  .carried p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--muted); text-wrap: pretty; }
-  ol { list-style: none; margin: 0; padding: 0; }
-  ol > li { display: flex; flex-wrap: wrap; gap: 8px 40px; padding: 20px 0; border-top: 1px solid var(--line); }
-  .year { flex: 0 0 80px; font-size: 22px; }
+  /* Indented to line up with the text of the periods above. */
+  .summary { margin: 0 0 24px 200px; max-width: 62ch; font-size: 16px; line-height: 1.6; text-wrap: pretty; }
+  ol, .areas { list-style: none; margin: 0; padding: 0; }
+  ol > li, .areas > li { display: flex; flex-wrap: wrap; gap: 8px 32px; padding: 20px 0; border-top: 1px solid var(--line); }
+  .period { flex: 0 0 168px; font: 400 13px/1.5 var(--mono); padding-top: 2px; }
   .entry { flex: 1 1 400px; display: grid; gap: 6px; }
+  .role { font-size: 14px; font-weight: 600; }
   .entry p { margin: 0; font-size: 16px; line-height: 1.6; max-width: 62ch; text-wrap: pretty; }
   .entry a { color: var(--accent); white-space: nowrap; font-size: 14px; }
   .entry a:hover { color: var(--ink); }
   .cv { padding-top: 24px; }
   @media (max-width: 720px) {
-    .responsibilities, .carried { margin-left: 0; }
+    .summary { margin-left: 0; }
   }
   @media (max-width: 560px) {
     .when { text-align: left; }
+    .period { flex-basis: 100%; }
     .entry { flex-basis: 100%; }
   }
 </style>

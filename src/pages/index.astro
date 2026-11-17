@@ -1,19 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
-import Hero from '../components/Hero.astro';
-import CaseStudies from '../components/CaseStudies';
-import Highlights from '../components/Highlights.astro';
-import Experience from '../components/Experience.astro';
-import Stack from '../components/Stack.astro';
-import Notes from '../components/Notes.astro';
-import Contact from '../components/Contact.astro';
-import { profile } from '../content/profile';
+import Home from '../components/Home.astro';
+import WriteUpDrawer from '../components/WriteUpDrawer';
 import { caseStudiesInOrder } from '../lib/cases';
+import { profile } from '../content/profile';
 import { yearsSince } from '../lib/tenure';
 import { education } from '../content/experience';
 import { stack } from '../content/stack';
 
-const studies = await caseStudiesInOrder();
 // Who this site is about, for search engines. No email or phone: those stay out of the page.
 const person = {
   '@context': 'https://schema.org',
@@ -27,21 +21,12 @@ const person = {
   alumniOf: { '@type': 'CollegeOrUniversity', name: education.school },
   knowsAbout: stack.filter((g) => g.group !== 'Domain').flatMap((g) => g.items),
 };
-const description = `${profile.headline} in Dubai with ${yearsSince(profile.careerStart)}+ years building and maintaining business-critical ERP systems: Laravel, MariaDB internals, infrastructure and data recovery.`;
+const studies = await caseStudiesInOrder();
+const title = `${profile.name} · Full-stack developer`;
+const description = `Full-stack developer in Dubai, ${yearsSince(profile.careerStart)} years in. Builds and maintains business software (accounting, HR and payroll) in PHP, Laravel, JavaScript and MariaDB, and the servers it runs on.`;
 ---
 
-<Base title={`${profile.name} · ${profile.headline}`} description={description} structuredData={person}>
-  <Hero />
-  <section id="work" class="section">
-    <div class="section-head">
-      <h2 class="display">Selected case studies</h2>
-      <span class="hint">Click to open · ← → to browse</span>
-    </div>
-    <CaseStudies client:load studies={studies} siteName={profile.name} />
-  </section>
-  <Highlights />
-  <Experience />
-  <Stack />
-  <Notes />
-  <Contact />
+<Base title={title} description={description} structuredData={person}>
+  <Home />
+  <WriteUpDrawer client:load studies={studies} siteName={profile.name} homeTitle={title} />
 </Base>

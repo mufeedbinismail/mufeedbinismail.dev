@@ -1,5 +1,19 @@
+/** How I work, each backed by something on this page. */
 export const notes = [
-  { title: 'Refactor bottom-up', text: 'Find the exact friction point and move it to another layer. Build from the processor up to the policy; the pattern shows up on its own.' },
-  { title: 'Fix the cause, not the hardware', text: 'The client kept buying bigger servers for a slow invoice screen. The real fix was not recomputing the whole ledger on every request.' },
-  { title: 'Make the right thing the easy thing', text: 'Strict types, one policy file, one core repo. Good structure protects the team better than documentation does.' },
+  {
+    title: 'Learn how the client works first',
+    text: 'My first three months in Dubai went on how clients use the product to run their business. I built payroll sitting with accountants. Tadbeer only worked the second time, once I had learned the operation on site.',
+  },
+  {
+    title: 'Fix the cause',
+    text: 'The slow invoice screen had been given bigger servers. The backup server had been cleared by hand for years. Both had one cause that could be fixed once.',
+  },
+  {
+    title: 'Refactor bottom-up',
+    text: 'Find the exact point where things get tangled and move it to its own layer. Working up from there, the pattern shows itself; designing top-down, I tend to guess wrong or over-build.',
+  },
+  {
+    title: 'Leave it easy to change',
+    text: 'One policy file per leave type, one contract per workflow, one core codebase. The next person should be able to change it without knowing everything I knew.',
+  },
 ];

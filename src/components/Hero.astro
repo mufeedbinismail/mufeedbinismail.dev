@@ -1,35 +1,56 @@
 ---
 import { profile } from '../content/profile';
-import { spelled, yearOf, yearsSince } from '../lib/tenure';
+import { yearOf, yearsSince } from '../lib/tenure';
 
-const years = spelled(yearsSince(profile.companyStart));
-const Years = years[0].toUpperCase() + years.slice(1);
+const facts = [
+  ['Now', `${profile.headline}, Direct Axis Technology`],
+  ['Works on', 'AxisPro, the company’s ERP for UAE businesses (200+ clients); Acodax since 2026'],
+  ['Based in', profile.location],
+  ['Working since', `${yearOf(profile.careerStart)} · ${yearsSince(profile.careerStart)} years`],
+  ['Works in', 'PHP and Laravel, JavaScript, MariaDB, Linux'],
+  ['Knows', 'Finance and accounting, sales and purchase, CRM, HR (attendance, leave, payroll, workflow), document management, manufacturing, inventory and costing, fixed assets, UAE government services (Tasheel, Amer, Tawjeeh, Tadbeer, typing centres)'],
+];
 ---
 
 <section class="hero">
-  <div class="eyebrow">{profile.headline} · ERP &amp; SaaS · <span class="nowrap">{yearOf(profile.companyStart)}–present</span></div>
-  <h1 class="display">I learn the business before I write the code.</h1>
-  <div class="intro">
-    <p>
-      {Years} years at one ERP company as it grew from three developers to thirty-plus people, first from its
-      Kannur office and in Dubai since {profile.dubaiSince}. I went from writing features to working across the
-      core product: architecture, incidents, and client-facing financial demos.
-    </p>
-    <p>
-      Most of my best work sits between engineering and operations: recovering lost data from raw disk, turning
-      months-long deployments into hours, and making complex domains hard to get wrong.
-    </p>
+  <div class="name">
+    <h1 class="display">{profile.name}</h1>
+    <p>{profile.title}</p>
   </div>
+  <dl>
+    {
+      facts.map(([term, detail]) => (
+        <div class:list={{ wide: term === 'Knows' }}>
+          <dt class="label">{term}</dt>
+          <dd>{detail}</dd>
+        </div>
+      ))
+    }
+  </dl>
 </section>
 
 <style>
-  .nowrap { white-space: nowrap; }
-  .hero { padding: 96px 0 80px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 36px; }
-  h1 { font-size: clamp(36px, 6vw, 72px); line-height: 1.04; max-width: 17ch; text-wrap: balance; }
-  .intro { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 28px; max-width: 900px; }
-  p { margin: 0; font-size: 18px; line-height: 1.6; color: var(--muted); text-wrap: pretty; }
+  /* minmax(0, 1fr): without it the column grows to the facts' widest content and the page scrolls sideways on phones. */
+  .hero { padding: 88px 0 72px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; }
+  .name { display: grid; gap: 12px; }
+  h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.05; }
+  .name p { margin: 0; font-size: 19px; color: var(--muted); }
+  dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+    gap: 20px 32px;
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+    max-width: 960px;
+  }
+  dl > div { display: grid; gap: 6px; align-content: start; }
+  /* The domain list is long; give it the whole row instead of a narrow column. */
+  dl > .wide { grid-column: 1 / -1; }
+  dl > .wide dd { max-width: 80ch; }
+  dd { margin: 0; font-size: 15px; line-height: 1.5; text-wrap: pretty; }
   @media (max-width: 560px) {
-    .hero { padding: 56px 0 48px; gap: 28px; }
-    p { font-size: 17px; }
+    .hero { padding: 48px 0 40px; gap: 32px; }
+    .name p { font-size: 17px; }
   }
 </style>
